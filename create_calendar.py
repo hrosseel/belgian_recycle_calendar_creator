@@ -84,7 +84,7 @@ def fetch_collections(auth_headers: dict, config: dict, address: dict):
 
 def create_calendar(collections):
     lang = config["language"]
-    collection_str = {
+    collection_msg = {
         "nl": "Ophaling van ",
         "fr": "Collecte de ",
         "en": "Collection of "
@@ -94,7 +94,7 @@ def create_calendar(collections):
         if item.get("exception", {}).get("replacedBy") is None:
             e = Event()
             if item["type"] == "collection":
-                e.name = collection_str[lang] + item["fraction"]["name"][lang]
+                e.name = collection_msg[lang] + item["fraction"]["name"][lang]
                 e.begin = item["timestamp"][:10] + "T06:00:00.000"
                 e.duration = {"minutes": 15}
             elif item["type"] == "event":
