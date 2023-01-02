@@ -81,21 +81,29 @@ def fetch_collections(auth_headers: dict, config: dict, address: dict):
 
 
 def create_calendar(collections):
+    lang = config["language"]
+    if lang == "nl":
+        collection_str = "Ophaling van "
+    elif lang == "fr":
+        collection_str = "Collecte de "
+    else:
+        collection_str = "Collection of "
+
     calendar = Calendar()
     for item in collections["items"]:
         if item.get("exception", {}).get("replacedBy") is None:
             e = Event()
             if item["type"] == "collection":
-                e.name = "Ophaling van " + item["fraction"]["name"]["nl"]
+                e.name = collection_str + item["fraction"]["name"][lang]
                 e.begin = item["timestamp"][:10] + "T06:00:00.000"
                 e.duration = {"minutes": 15}
             elif item["type"] == "event":
-                e.name = item["event"]["title"]["nl"]
-                e.description = item["event"]["description"]["nl"] + "\n\n"
+                e.name = item["event"]["title"][lang]
+                e.description = item["event"]["description"][lang] + "\n\n"
                 e.begin = item["timestamp"]
                 e.make_all_day()
-                e.location = item["event"]["introduction"]["nl"]
-                e.url = item["event"]["externalLink"]["nl"]
+                e.location = item["event"]["introduction"][lang]
+                e.url = item["event"]["externalLink"][lang]
             calendar.events.add(e)
     return calendar
 
