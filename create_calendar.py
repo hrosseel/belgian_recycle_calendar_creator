@@ -31,7 +31,8 @@ def fetch_address(auth_headers: dict, config: dict):
                 zip_id = item["id"]
                 break
         if zip_id == "":
-            raise Exception("Could not find correct zip code.")
+            raise Exception("Could not find the right zip code."
+                            f"Zip code = {config['zipcode']}")
     else:
         raise Exception("Error occured while fetching zipcode id. "
                         f"[{zip_resp.status_code}]")
@@ -48,7 +49,8 @@ def fetch_address(auth_headers: dict, config: dict):
                 street_id = item["id"]
                 break
         if street_id == "":
-            raise Exception("Could not find correct street name.")
+            raise Exception("Could not find the right street name. "
+                            f"Street name = {config['street_name']}")
     else:
         raise Exception("Error occured while fetching street id. "
                         f"[{street_resp.status_code}]")
