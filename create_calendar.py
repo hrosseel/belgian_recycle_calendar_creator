@@ -14,7 +14,7 @@ def authenticate(config: dict) -> dict:
         access_token = resp_json["accessToken"]
         headers["Authorization"] = access_token
     else:
-        raise Exception("Error occured while requesting acces-token. "
+        raise Exception("Error occured while requesting access-token. "
                         f"[{at_resp.status_code}]")
     return headers
 
