@@ -45,7 +45,7 @@ def fetch_address(auth_headers: dict, config: dict):
         street_json = street_resp.json()
         street_id = ""
         for item in street_json["items"]:
-            if item["name"] == config["street_name"]:
+            if config["street_name"] in item["names"].values():
                 street_id = item["id"]
                 break
         if street_id == "":
@@ -84,19 +84,17 @@ def fetch_collections(auth_headers: dict, config: dict, address: dict):
 
 def create_calendar(collections):
     lang = config["language"]
-    if lang == "nl":
-        collection_str = "Ophaling van "
-    elif lang == "fr":
-        collection_str = "Collecte de "
-    else:
-        collection_str = "Collection of "
-
+    collection_str = {
+        "nl": "Ophaling van ",
+        "fr": "Collecte de ",
+        "en": "Collection of "
+    }
     calendar = Calendar()
     for item in collections["items"]:
         if item.get("exception", {}).get("replacedBy") is None:
             e = Event()
             if item["type"] == "collection":
-                e.name = collection_str + item["fraction"]["name"][lang]
+                e.name = collection_str[lang] + item["fraction"]["name"][lang]
                 e.begin = item["timestamp"][:10] + "T06:00:00.000"
                 e.duration = {"minutes": 15}
             elif item["type"] == "event":

@@ -1,8 +1,8 @@
 {
-    "street_name": "Streetname",
+    "street_name": "Avenue de la Clairière",
     "housenumber": 1,
     "zipcode": 1000,
-    "language": "nl",
+    "language": "fr",
     "from_date": "2023-01-01",
     "until_date": "2023-12-31",
     "headers": {
