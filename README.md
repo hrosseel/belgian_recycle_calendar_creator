@@ -1,6 +1,6 @@
 # Belgian Recycle Calendar Creator
 
-Create a recycling calendar for your address using the [Recycle!](https://recycleapp.be) API. Only works in Belgium.
+A Python script for creating a personalized recycling calendar using the [Recycle!](https://recycleapp.be) API. Only works for Belgian addresses.
 
 # How to
 
