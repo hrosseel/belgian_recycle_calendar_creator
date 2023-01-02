@@ -1,0 +1,13 @@
+{
+    "street_name": "<YOUR ADDRESS>",
+    "housenumber": <YOUR HOUSENUMBER>,
+    "zipcode": <YOUR ZIPCODE>,
+    "from_date": "2023-01-01",
+    "until_date": "2023-12-31",
+    "headers": {
+        "User-Agent": "Mozilla/5.0",
+        "x-consumer": "recycleapp.be",
+        "x-secret": "8eTFgy3AQH0mzAcj3xMwaKnNyNnijEFIEegjgNpBHifqtQ4IEyWqmJGFz3ggKQ7B4vwUYS8xz8KwACZihCmboGb6brtVB3rpne2Ww5uUM2n3i4SKNUg6Vp7lhAS8INDUNH8Ll7WPhWRsQOXBCjVz5H8fr0q6fqZCosXdndbNeiNy73FqJBn794qKuUAPTFj8CuAbwI6Wom98g72Px1MPRYHwyrlHUbCijmDmA2zoWikn34LNTUZPd7kS0uuFkibkLxCc1PeOVYVHeh1xVxxwGBsMINWJEUiIBqZt9VybcHpUJTYzureqfund1aeJvmsUjwyOMhLSxj9MLQ07iTbvzQa6vbJdC0hTsqTlndccBRm9lkxzNpzJBPw8VpYSyS3AhaR2U1n4COZaJyFfUQ3LUBzdj5gV8QGVGCHMlvGJM0ThnRKENSWZLVZoHHeCBOkfgzp0xl0qnDtR8eJF0vLkFiKwjX7DImGoA8IjqOYygV3W9i9rIOfK"
+    },
+    "api_endpoint": "https://api.fostplus.be/recycle-public/app/v1"
+}
