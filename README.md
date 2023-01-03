@@ -5,9 +5,8 @@ A Python script for creating a personalized recycling calendar using the [Recycl
 # How to
 
 0. Install Python dependencies (see [requirements.txt](requirements.txt))
-1. Edit [config.json](config.json) file to include your address and preferred language (currently supports: 'nl', 'fr', and 'en')
-2. Execute `python create_calendar.py` in a terminal
-3. Import the resulting calendar file (ics) in your favorite calendar application
+1. Execute `python main.py` in a terminal
+2. Import the resulting calendar file (ics) in your favorite calendar application
 
 # Requirements
 
