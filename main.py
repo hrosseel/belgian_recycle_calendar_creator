@@ -1,4 +1,5 @@
 import json
+
 import click
 
 from lib import (authenticate, create_calendar, fetch_address_ids,
@@ -37,7 +38,8 @@ def click_main(streetname, number, postalcode, lang='en'):
     filename = f"recycle_calendar_{streetname}_{number}.ics"
 
     print(f"Done! Writing calendar to file: {filename}")
-    open(filename, 'w').writelines(calendar)
+    with open(filename, 'w', encoding='utf-8') as my_file:
+        my_file.writelines(calendar.serialize_iter())
 
 
 click_main()
