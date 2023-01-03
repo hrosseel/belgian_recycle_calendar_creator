@@ -1,8 +1,4 @@
 {
-    "street_name": "Olympiadenlaan",
-    "housenumber": 2,
-    "zipcode": 1140,
-    "language": "nl",
     "from_date": "2023-01-01",
     "until_date": "2023-12-31",
     "headers": {

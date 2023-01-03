@@ -1,5 +1,3 @@
-import json
-
 import requests as req
 from ics import Calendar, Event
 
@@ -19,54 +17,56 @@ def authenticate(config: dict) -> dict:
     return headers
 
 
-def fetch_address(auth_headers: dict, config: dict):
+def fetch_address_ids(auth_headers: dict, config: dict, streetname: str,
+                      number: int, postalcode: int) -> dict:
     zip_resp = req.get(config["api_endpoint"] + "/zipcodes",
-                       {"q": config["zipcode"]},
+                       {"q": postalcode},
                        headers=auth_headers)
     if zip_resp.status_code == 200:
         zip_json = zip_resp.json()
         zip_id = ""
         for item in zip_json["items"]:
-            if int(item["code"]) == config["zipcode"]:
+            if int(item["code"]) == postalcode:
                 zip_id = item["id"]
                 break
         if zip_id == "":
             raise Exception("Could not find the right zip code."
-                            f"Zip code = {config['zipcode']}")
+                            f"Zip code = {postalcode}")
     else:
         raise Exception("Error occured while fetching zipcode id. "
-                        f"[{zip_resp.status_code}]")
+                        f"[HTTP {zip_resp.status_code}]")
 
     street_resp = req.post(config["api_endpoint"] + "/streets",
-                           params={"q": config["street_name"],
+                           params={"q": streetname,
                                    "zipcodes": zip_id},
                            headers=auth_headers)
     if street_resp.status_code == 200:
         street_json = street_resp.json()
         street_id = ""
         for item in street_json["items"]:
-            if config["street_name"] in item["names"].values():
+            if streetname in item["names"].values():
                 street_id = item["id"]
                 break
         if street_id == "":
             raise Exception("Could not find the right street name. "
-                            f"Street name = {config['street_name']}")
+                            f"Street name = {streetname}")
     else:
         raise Exception("Error occured while fetching street id. "
-                        f"[{street_resp.status_code}]")
+                        f"[HTTP {street_resp.status_code}]")
 
     return {
         "zip": zip_id,
         "street": street_id,
-        "housenumber": config["housenumber"]
+        "housenumber": number
         }
 
 
-def fetch_collections(auth_headers: dict, config: dict, address: dict):
+def fetch_collections(auth_headers: dict, config: dict,
+                      address_ids: dict) -> dict:
     req_params = {
-        "zipcodeId": address["zip"],
-        "streetId": address["street"],
-        "houseNumber": address["housenumber"],
+        "zipcodeId": address_ids["zip"],
+        "streetId": address_ids["street"],
+        "houseNumber": address_ids["housenumber"],
         "fromDate": config["from_date"],
         "untilDate": config["until_date"],
         "size": "200"
@@ -82,8 +82,7 @@ def fetch_collections(auth_headers: dict, config: dict, address: dict):
     return collections
 
 
-def create_calendar(collections):
-    lang = config["language"]
+def create_calendar(collections, lang) -> Calendar:
     collection_msg = {
         "nl": "Ophaling van ",
         "fr": "Collecte de ",
@@ -106,18 +105,3 @@ def create_calendar(collections):
                 e.url = item["event"]["externalLink"][lang]
             calendar.events.add(e)
     return calendar
-
-
-# Load config
-config = json.load(open("config.json", 'r'))
-# Authenticate with api
-auth_headers = authenticate(config)
-# Get address IDs
-address = fetch_address(auth_headers, config)
-# Get collections for address
-collections = fetch_collections(auth_headers, config, address)
-# Create calendar
-calendar = create_calendar(collections)
-
-print("Done! Writing to file...")
-open("waste_calendar.ics", 'w').writelines(calendar)
