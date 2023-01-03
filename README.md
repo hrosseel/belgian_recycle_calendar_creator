@@ -13,6 +13,7 @@ A Python script for creating a personalized recycling calendar using the [Recycl
 1. Execute `./be_recycle_calendar` in a Unix terminal (macOS and Linux) and follow the prompts
 2. Import the resulting calendar file (ics) in your favorite calendar application
 
+Windows executables are currently not supported.
 
 # Requirements
 

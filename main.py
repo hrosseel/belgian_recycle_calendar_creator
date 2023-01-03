@@ -1,4 +1,5 @@
 import json
+import os
 
 import click
 
@@ -23,8 +24,9 @@ from lib import (authenticate, create_calendar, fetch_address_ids,
               "calendar. Options are: 'nl', 'fr', and 'en'. Defaults to 'en'.",
               prompt="Please specify your preferred language")
 def click_main(streetname, number, postalcode, lang='en'):
+    filedir = os.path.dirname(__file__)
     # Load config
-    config = json.load(open("config.json", 'r'))
+    config = json.load(open(os.path.join(filedir, "config.json"), 'r'))
     # Authenticate with api
     auth_headers = authenticate(config)
     # Get address IDs
