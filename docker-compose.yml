@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  belgian_recycle_calendar_creator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: belgian_recycle_calendar_creator
+    container_name: belgian_recycle_calendar_creator_instance
+    volumes:
+      - .:/app
+    stdin_open: true
+    tty: true
+    restart: "no"
