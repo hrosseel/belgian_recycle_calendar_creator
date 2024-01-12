@@ -62,13 +62,13 @@ def fetch_address_ids(auth_headers: dict, config: dict, streetname: str,
 
 
 def fetch_collections(auth_headers: dict, config: dict,
-                      address_ids: dict) -> dict:
+                      address_ids: dict, from_date: str, to_date: str) -> dict:
     req_params = {
         "zipcodeId": address_ids["zip"],
         "streetId": address_ids["street"],
         "houseNumber": address_ids["housenumber"],
-        "fromDate": config["from_date"],
-        "untilDate": config["until_date"],
+        "fromDate": from_date,
+        "untilDate": to_date,
         "size": "200"
     }
     collection_resp = req.get(config["api_endpoint"] + "/collections",
@@ -95,7 +95,7 @@ def create_calendar(collections, lang) -> Calendar:
             if item["type"] == "collection":
                 e.name = collection_msg[lang] + item["fraction"]["name"][lang]
                 e.begin = item["timestamp"][:10] + "T06:00:00.000"
-                e.duration = {"minutes": 15}
+                e.duration = {"minutes": 60}
             elif item["type"] == "event":
                 e.name = item["event"]["title"][lang]
                 e.description = item["event"]["description"][lang] + "\n\n"

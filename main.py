@@ -2,6 +2,7 @@ import json
 import os
 
 import click
+import datetime
 
 from lib import (authenticate, create_calendar, fetch_address_ids,
                  fetch_collections)
@@ -23,7 +24,10 @@ from lib import (authenticate, create_calendar, fetch_address_ids,
               help="The preferred language of the recycle "
               "calendar. Options are: 'nl', 'fr', and 'en'. Defaults to 'en'.",
               prompt="Please specify your preferred language")
-def click_main(streetname, number, postalcode, lang='en'):
+def click_main(streetname, number, postalcode, lang='en', year=None):
+
+    year = datetime.datetime.now().year
+
     filedir = os.path.dirname(__file__)
     # Load config
     config = json.load(open(os.path.join(filedir, "config.json"), 'r'))
@@ -32,8 +36,10 @@ def click_main(streetname, number, postalcode, lang='en'):
     # Get address IDs
     address_ids = fetch_address_ids(auth_headers, config, streetname, number,
                                     postalcode)
+
     # Get collections for address
-    collections = fetch_collections(auth_headers, config, address_ids)
+    collections = fetch_collections(auth_headers, config, address_ids,
+                                    f"{year}-01-01", f"{year}-12-31")
     # Create calendar
     calendar = create_calendar(collections, lang)
 
