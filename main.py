@@ -31,15 +31,33 @@ def click_main(streetname, number, postalcode, lang='en', year=None):
     filedir = os.path.dirname(__file__)
     # Load config
     config = json.load(open(os.path.join(filedir, "config.json"), 'r'))
-    # Authenticate with api
-    auth_headers = authenticate(config)
-    # Get address IDs
-    address_ids = fetch_address_ids(auth_headers, config, streetname, number,
-                                    postalcode)
+    
+    try:
+        # Authenticate with api
+        auth_headers = authenticate(config)
+    except Exception:
+        print("Something went wrong while authenticating with the api. "
+              "Did they change the API? Please contact the developer.")
+        return
+    
+    try:
+        # Get address IDs
+        address_ids = fetch_address_ids(auth_headers, config, streetname,
+                                        number, postalcode)
+    except Exception:
+        print("Something went wrong while fetching your address. Are you sure "
+              "you entered the correct address?")
+        return
 
-    # Get collections for address
-    collections = fetch_collections(auth_headers, config, address_ids,
-                                    f"{year}-01-01", f"{year}-12-31")
+    try:
+        # Get collections for address
+        collections = fetch_collections(auth_headers, config, address_ids,
+                                        f"{year}-01-01", f"{year}-12-31")
+    except Exception:
+        print("Something went wrong while fetching collections for your "
+              "address. Are you sure you entered the correct address?")
+        return
+
     # Create calendar
     calendar = create_calendar(collections, lang)
 
