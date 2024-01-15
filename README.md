@@ -21,6 +21,11 @@ A Python script for creating a personalized recycling calendar using the [Recycl
 
 Windows executables are currently not supported.
 
+# How to build the executable
+
+1. Install [PyInstaller](https://www.pyinstaller.org/) using `pip install pyinstaller`
+2. Build the executable using `pyinstaller -F --add-data=config.json:. -n "be_recycle_calendar" main.py`
+
 # Requirements
 
 * Python 3.7 or higher
