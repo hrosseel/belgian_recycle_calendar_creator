@@ -31,22 +31,24 @@ def click_main(streetname, number, postalcode, lang='en', year=None):
     filedir = os.path.dirname(__file__)
     # Load config
     config = json.load(open(os.path.join(filedir, "config.json"), 'r'))
-    
+
     try:
         # Authenticate with api
         auth_headers = authenticate(config)
     except Exception:
         print("Something went wrong while authenticating with the api. "
-              "Did they change the API? Please contact the developer.")
+              "Did they change the API? Please open an issue for this "
+              "on GitHub.")
         return
-    
+
     try:
         # Get address IDs
         address_ids = fetch_address_ids(auth_headers, config, streetname,
                                         number, postalcode)
     except Exception:
         print("Something went wrong while fetching your address. Are you sure "
-              "you entered the correct address?")
+              "you entered the correct address? If so, please open an issue "
+              "for this on GitHub.")
         return
 
     try:
@@ -55,11 +57,18 @@ def click_main(streetname, number, postalcode, lang='en', year=None):
                                         f"{year}-01-01", f"{year}-12-31")
     except Exception:
         print("Something went wrong while fetching collections for your "
-              "address. Are you sure you entered the correct address?")
+              "address. Are you sure you entered the correct address?"
+              " If so, please open an issue for this on GitHub.")
         return
 
-    # Create calendar
-    calendar = create_calendar(collections, lang)
+    try:
+        # Create calendar
+        set_day_events = config["set_day_events"]
+        calendar = create_calendar(collections, lang, set_day_events)
+    except Exception:
+        print("Something went wrong while creating the calendar. "
+              "Please open an issue for this on GitHub.")
+        return
 
     filename = f"recycle_calendar_{streetname}_{number}.ics"
 

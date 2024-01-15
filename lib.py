@@ -82,7 +82,7 @@ def fetch_collections(auth_headers: dict, config: dict,
     return collections
 
 
-def create_calendar(collections, lang) -> Calendar:
+def create_calendar(collections, lang, set_day_events) -> Calendar:
     collection_msg = {
         "nl": "Ophaling van ",
         "fr": "Collecte de ",
@@ -94,8 +94,12 @@ def create_calendar(collections, lang) -> Calendar:
             e = Event()
             if item["type"] == "collection":
                 e.name = collection_msg[lang] + item["fraction"]["name"][lang]
-                e.begin = item["timestamp"][:10] + "T06:00:00.000"
-                e.duration = {"minutes": 60}
+                if set_day_events:
+                    e.begin = item["timestamp"]
+                    e.make_all_day()
+                else:
+                    e.begin = item["timestamp"][:10] + "T06:00:00.000"
+                    e.duration = {"minutes": 60}
             elif item["type"] == "event":
                 e.name = item["event"]["title"][lang]
                 e.description = item["event"]["description"][lang] + "\n\n"
