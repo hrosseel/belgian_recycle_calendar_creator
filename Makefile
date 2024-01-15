@@ -20,7 +20,7 @@ run-docker:
 
 # Install requirements
 install-deps:
-  pip install -r requirements.txt
+	pip install -r requirements.txt
 
 # Run the application natively
 run:
