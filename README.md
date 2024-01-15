@@ -8,10 +8,14 @@ A Python script for creating a personalized recycling calendar using the [Recycl
 1. Execute `python main.py` in a terminal and follow the prompts
 2. Import the resulting calendar file (ics) in your favorite calendar application
 
+Alternatively, you can use the Makefile: `make install-deps && make run`
+
 # How to run in Docker
 
 1. Start the Docker container by executing `docker-compose run --rm belgian_recycle_calendar_creator` and follow the prompts
 2. Import the resulting calendar file (ics) in your favorite calendar application
+
+Alternatively, you can use the Makefile: `make run-docker`
 
 # How to run the executable
 
