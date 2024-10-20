@@ -2,21 +2,6 @@ import requests as req
 from ics import Calendar, Event
 
 
-def authenticate(config: dict) -> dict:
-    headers = config["headers"]
-    at_resp = req.get(config["api_endpoint"] + "/access-token",
-                      headers=headers)
-
-    if at_resp.status_code == 200:
-        resp_json = at_resp.json()
-        access_token = resp_json["accessToken"]
-        headers["Authorization"] = access_token
-    else:
-        raise Exception("Error occured while requesting access-token. "
-                        f"[{at_resp.status_code}]")
-    return headers
-
-
 def fetch_address_ids(auth_headers: dict, config: dict, streetname: str,
                       number: int, postalcode: int) -> dict:
     zip_resp = req.get(config["api_endpoint"] + "/zipcodes",
@@ -58,7 +43,7 @@ def fetch_address_ids(auth_headers: dict, config: dict, streetname: str,
         "zip": zip_id,
         "street": street_id,
         "housenumber": number
-        }
+    }
 
 
 def fetch_collections(auth_headers: dict, config: dict,

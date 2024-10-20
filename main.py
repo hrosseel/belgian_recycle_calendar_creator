@@ -4,8 +4,7 @@ import os
 import click
 import datetime
 
-from lib import (authenticate, create_calendar, fetch_address_ids,
-                 fetch_collections)
+from lib import (create_calendar, fetch_address_ids, fetch_collections)
 
 
 @click.command()
@@ -31,15 +30,7 @@ def click_main(streetname, number, postalcode, lang='en', year=None):
     filedir = os.path.dirname(__file__)
     # Load config
     config = json.load(open(os.path.join(filedir, "config.json"), 'r'))
-
-    try:
-        # Authenticate with api
-        auth_headers = authenticate(config)
-    except Exception:
-        print("Something went wrong while authenticating with the api. "
-              "Did they change the API? Please open an issue for this "
-              "on GitHub.")
-        return
+    auth_headers = config["headers"]
 
     try:
         # Get address IDs
