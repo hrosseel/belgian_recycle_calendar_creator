@@ -23,13 +23,20 @@ from lib import (create_calendar, fetch_address_ids, fetch_collections)
               help="The preferred language of the recycle "
               "calendar. Options are: 'nl', 'fr', and 'en'. Defaults to 'en'.",
               prompt="Please specify your preferred language")
-def click_main(streetname, number, postalcode, lang='en', year=None):
+@click.option("--reminder", is_flag=True,
+              help="Include this option to enable reminders. This will send a"
+              "notification hours before collection, configurable with "
+              "--reminder-time")
+@click.option("--reminder-time", type=int, required=False, default=12,
+              help="The amount of hours before the event that you want"
+              "to receive a notification.")
+def click_main(streetname, number, postalcode, reminder, reminder_time, lang='en', year=None):
 
     year = datetime.datetime.now().year
 
     filedir = os.path.dirname(__file__)
     # Load config
-    config = json.load(open(os.path.join(filedir, "config.json"), 'r'))
+    config = json.load(open(os.path.join(filedir, "config.json"), "r"))
     auth_headers = config["headers"]
 
     try:
@@ -55,7 +62,7 @@ def click_main(streetname, number, postalcode, lang='en', year=None):
     try:
         # Create calendar
         set_day_events = config["set_day_events"]
-        calendar = create_calendar(collections, lang, set_day_events)
+        calendar = create_calendar(collections, lang, set_day_events, reminder, reminder_time)
     except Exception:
         print("Something went wrong while creating the calendar. "
               "Please open an issue for this on GitHub.")
@@ -64,7 +71,7 @@ def click_main(streetname, number, postalcode, lang='en', year=None):
     filename = f"recycle_calendar_{streetname}_{number}.ics"
 
     print(f"Done! Writing calendar to file: {filename}")
-    with open(filename, 'w', encoding='utf-8') as my_file:
+    with open(filename, "w", encoding="utf-8") as my_file:
         my_file.writelines(calendar.serialize_iter())
 
 

@@ -1,6 +1,6 @@
 import requests as req
-from ics import Calendar, Event
-
+from ics import Calendar, Event, DisplayAlarm
+from datetime import timedelta
 
 def fetch_address_ids(auth_headers: dict, config: dict, streetname: str,
                       number: int, postalcode: int) -> dict:
@@ -54,7 +54,7 @@ def fetch_collections(auth_headers: dict, config: dict,
         "houseNumber": address_ids["housenumber"],
         "fromDate": from_date,
         "untilDate": to_date,
-        "size": "200"
+        "size": "200",
     }
     collection_resp = req.get(config["api_endpoint"] + "/collections",
                               req_params, headers=auth_headers)
@@ -67,11 +67,11 @@ def fetch_collections(auth_headers: dict, config: dict,
     return collections
 
 
-def create_calendar(collections, lang, set_day_events) -> Calendar:
+def create_calendar(collections, lang, set_day_events, reminder_enabled, reminder_time) -> Calendar:
     collection_msg = {
         "nl": "Ophaling van ",
         "fr": "Collecte de ",
-        "en": "Collection of "
+        "en": "Collection of ",
     }
     calendar = Calendar()
     for item in collections["items"]:
@@ -92,5 +92,7 @@ def create_calendar(collections, lang, set_day_events) -> Calendar:
                 e.make_all_day()
                 e.location = item["event"]["introduction"][lang]
                 e.url = item["event"]["externalLink"][lang]
+            if reminder_enabled:
+                e.alarms = [DisplayAlarm(trigger=timedelta(hours=-reminder_time),display_text=item["fraction"]["name"][lang])]
             calendar.events.add(e)
     return calendar
