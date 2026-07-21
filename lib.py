@@ -22,7 +22,7 @@ def fetch_address_ids(
             )
     else:
         raise Exception(
-            "Error occured while fetching zipcode id. " f"[HTTP {zip_resp.status_code}]"
+            "Error occurred while fetching zipcode id. " f"[HTTP {zip_resp.status_code}]"
         )
 
     street_resp = req.post(
@@ -43,7 +43,7 @@ def fetch_address_ids(
             )
     else:
         raise Exception(
-            "Error occured while fetching street id. "
+            "Error occurred while fetching street id. "
             f"[HTTP {street_resp.status_code}]"
         )
 
